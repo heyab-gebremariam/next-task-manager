@@ -1,7 +1,7 @@
 "use client";
 
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface TaskFormProps {
   task?: { id?: number; title: string; description?: string; status: string };
@@ -9,19 +9,42 @@ interface TaskFormProps {
 }
 
 export default function TaskForm({ task, onSubmit }: TaskFormProps) {
-  const [title, setTitle] = useState(task?.title || "");
-  const [description, setDescription] = useState(task?.description || "");
-  const [status, setStatus] = useState(task?.status || "pending");
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [status, setStatus] = useState("pending");
+
+  // Sync form state with task prop
+  useEffect(() => {
+    if (task) {
+      setTitle(task.title);
+      setDescription(task.description || "");
+      setStatus(task.status);
+    } else {
+      setTitle("");
+      setDescription("");
+      setStatus("pending");
+    }
+  }, [task]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       if (task?.id) {
-        await axios.put(`/api/tasks/${task.id}`, { title, description, status });
+        // Update existing task
+        await axios.put(`/api/tasks/${task.id}`, {
+          title,
+          description,
+          status,
+        });
       } else {
-        await axios.post("/api/tasks", { title, description, status });
+        // Create new task
+        await axios.post("/api/tasks", {
+          title,
+          description,
+          status,
+        });
       }
-      onSubmit();
+      onSubmit(); // Notify parent to refresh
     } catch (error) {
       console.error("Error submitting task:", error);
     }
