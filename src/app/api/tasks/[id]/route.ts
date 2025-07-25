@@ -1,16 +1,16 @@
 import { PrismaClient } from "@prisma/client";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 const prisma = new PrismaClient();
 
 // GET: Fetch a task by ID
 export async function GET(
-  request: Request,
-  context: { params: { id: string } }
+  request: NextRequest,
+  { params }: { params: { id: string } }
 ) {
   try {
     const task = await prisma.task.findUnique({
-      where: { id: parseInt(context.params.id) },
+      where: { id: parseInt(params.id) },
     });
     if (!task) {
       return NextResponse.json({ error: "Task not found" }, { status: 404 });
@@ -25,13 +25,13 @@ export async function GET(
 
 // PUT: Update a task
 export async function PUT(
-  request: Request,
-  context: { params: { id: string } }
+  request: NextRequest,
+  { params }: { params: { id: string } }
 ) {
   try {
     const { title, description, status } = await request.json();
     const task = await prisma.task.update({
-      where: { id: parseInt(context.params.id) },
+      where: { id: parseInt(params.id) },
       data: { title, description, status },
     });
     return NextResponse.json(task);
@@ -44,12 +44,12 @@ export async function PUT(
 
 // DELETE: Delete a task
 export async function DELETE(
-  request: Request,
-  context: { params: { id: string } }
+  request: NextRequest,
+  { params }: { params: { id: string } }
 ) {
   try {
     await prisma.task.delete({
-      where: { id: parseInt(context.params.id) },
+      where: { id: parseInt(params.id) },
     });
     return NextResponse.json({ message: "Task deleted" });
   } catch {
