@@ -8,8 +8,10 @@ export async function GET() {
   try {
     const tasks = await prisma.task.findMany();
     return NextResponse.json(tasks);
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: "Error fetching tasks" }, { status: 500 });
+  } finally {
+    await prisma.$disconnect();
   }
 }
 
@@ -21,7 +23,9 @@ export async function POST(request: Request) {
       data: { title, description, status },
     });
     return NextResponse.json(task, { status: 201 });
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: "Error creating task" }, { status: 500 });
+  } finally {
+    await prisma.$disconnect();
   }
 }
