@@ -102,9 +102,29 @@ npm run dev
 
 ***
 
-Step Four:
+Step Four (optional):
+    Convert to SQLite
 
-    Push to github
-    npm i -g vercel
-    vercel
-    Configure the DATABASE_URL environment variable in Vercel’s dashboard.
+    prisma/schema.prisma
+
+    datasource db {
+        provider = "sqlite"
+        url      = "file:./dev.db"
+    }
+
+
+    .env 
+    DATABASE_URL="file:./dev.db"
+
+    delete prisma/migrations folder
+
+
+    npx prisma migrate reset --force
+    npx prisma migrate dev --name init
+
+    npx prisma generate
+    npx prisma studio
+
+
+
+
