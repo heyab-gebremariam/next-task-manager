@@ -6,11 +6,11 @@ const prisma = new PrismaClient();
 // GET: Fetch a task by ID
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  context: { params: { id: string } }
 ) {
   try {
     const task = await prisma.task.findUnique({
-      where: { id: parseInt(params.id) },
+      where: { id: parseInt(context.params.id) },
     });
     if (!task) {
       return NextResponse.json({ error: "Task not found" }, { status: 404 });
@@ -26,12 +26,12 @@ export async function GET(
 // PUT: Update a task
 export async function PUT(
   request: Request,
-  { params }: { params: { id: string } }
+  context: { params: { id: string } }
 ) {
   try {
     const { title, description, status } = await request.json();
     const task = await prisma.task.update({
-      where: { id: parseInt(params.id) },
+      where: { id: parseInt(context.params.id) },
       data: { title, description, status },
     });
     return NextResponse.json(task);
@@ -45,11 +45,11 @@ export async function PUT(
 // DELETE: Delete a task
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  context: { params: { id: string } }
 ) {
   try {
     await prisma.task.delete({
-      where: { id: parseInt(params.id) },
+      where: { id: parseInt(context.params.id) },
     });
     return NextResponse.json({ message: "Task deleted" });
   } catch {
