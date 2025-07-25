@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 const prisma = new PrismaClient();
 
@@ -15,17 +15,16 @@ export async function GET() {
   }
 }
 
-// POST: Create a task
-export async function POST(request: Request) {
+// POST: Create a new task
+export async function POST(request: NextRequest) {
   try {
     const { title, description, status } = await request.json();
     const task = await prisma.task.create({
       data: { title, description, status },
     });
-    return NextResponse.json(task, { status: 201 });
-  } catch {
+    return NextResponse.json(task);
+  } catch (error) {
+    console.error("Error creating task:", error);
     return NextResponse.json({ error: "Error creating task" }, { status: 500 });
-  } finally {
-    await prisma.$disconnect();
   }
 }
