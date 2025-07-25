@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 // GET: Fetch a task by ID
 export async function GET(
   request: NextRequest,
-  { params }: { params: { [key: string]: string } }
+  { params }: { params: { id: string } }
 ) {
   try {
     const task = await prisma.task.findUnique({
@@ -18,15 +18,13 @@ export async function GET(
     return NextResponse.json(task);
   } catch {
     return NextResponse.json({ error: "Error fetching task" }, { status: 500 });
-  } finally {
-    await prisma.$disconnect();
   }
 }
 
 // PUT: Update a task
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { [key: string]: string } }
+  { params }: { params: { id: string } }
 ) {
   try {
     const { title, description, status } = await request.json();
@@ -37,15 +35,13 @@ export async function PUT(
     return NextResponse.json(task);
   } catch {
     return NextResponse.json({ error: "Error updating task" }, { status: 500 });
-  } finally {
-    await prisma.$disconnect();
   }
 }
 
 // DELETE: Delete a task
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { [key: string]: string } }
+  { params }: { params: { id: string } }
 ) {
   try {
     await prisma.task.delete({
@@ -54,7 +50,5 @@ export async function DELETE(
     return NextResponse.json({ message: "Task deleted" });
   } catch {
     return NextResponse.json({ error: "Error deleting task" }, { status: 500 });
-  } finally {
-    await prisma.$disconnect();
   }
 }
