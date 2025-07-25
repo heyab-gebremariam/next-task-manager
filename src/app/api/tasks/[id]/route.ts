@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 // GET: Fetch a task by ID
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: { [key: string]: string } }
 ) {
   try {
     const task = await prisma.task.findUnique({
@@ -26,7 +26,7 @@ export async function GET(
 // PUT: Update a task
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: { [key: string]: string } }
 ) {
   try {
     const { title, description, status } = await request.json();
@@ -45,7 +45,7 @@ export async function PUT(
 // DELETE: Delete a task
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: { [key: string]: string } }
 ) {
   try {
     await prisma.task.delete({
