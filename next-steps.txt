@@ -1,0 +1,82 @@
+
+
+Step One:
+
+npx create-next-app next-task-manager
+√ Would you like your code inside a `src/` directory? ... Yes
+
+
+cd next-task-manager
+
+npm install -D tailwindcss postcss autoprefixer
+npx tailwindcss init -p
+
+
+tailwind.config.js:
+    /** @type {import('tailwindcss').Config} */
+    module.exports = {
+    content: [
+        "./app/**/*.{js,ts,jsx,tsx}",
+        "./pages/**/*.{js,ts,jsx,tsx}",
+        "./components/**/*.{js,ts,jsx,tsx}",
+    ],
+    theme: {
+        extend: {},
+    },
+        plugins: [],
+    }
+
+
+
+src/app/globals.css
+    @tailwind base;
+    @tailwind components;
+    @tailwind utilities;
+
+
+npm run dev
+
+
+
+***
+
+
+Step Two:
+
+
+
+
+create database
+create .env
+    DB_DRIVER=postgres
+    DB_HOST=127.0.0.1
+    DB_USER=postgres
+    DB_PASSWORD=root
+    DB_NAME=hello-next
+    DB_PORT=5432
+
+
+
+
+create app/tasks module:
+    src/tasks/task.entity.ts (Task entity)
+    src/tasks/tasks.service.ts (Task service)
+    src/tasks/tasks.controller.ts (Task controller)
+    src/tasks/tasks.module.ts (Tasks module)
+
+
+
+
+***
+
+
+npx tailwindcss init -p
+
+if it shows error:
+    npm cache clean --force
+    npm install tailwindcss postcss autoprefixer
+    npx tailwindcss init -p
+
+
+
+
