@@ -44,39 +44,67 @@ npm run dev
 Step Two:
 
 
+CREATE DATABASE next-task-manager;
+
+npm install prisma @prisma/client
+npm install axios
+npx prisma init
 
 
-create database
-create .env
-    DB_DRIVER=postgres
-    DB_HOST=127.0.0.1
-    DB_USER=postgres
-    DB_PASSWORD=root
-    DB_NAME=hello-next
-    DB_PORT=5432
+update .env file:
+DATABASE_URL="postgresql://postgres:root@localhost:5432/next-task-manager?schema=public"
 
 
+Update prisma/schema.prisma
+    generator client {
+        provider = "prisma-client-js"
+    }
+
+    datasource db {
+        provider = "postgresql"
+        url      = env("DATABASE_URL")
+    }
+
+    model Task {
+        id        Int      @id @default(autoincrement())
+        title     String
+        description String?
+        status    String   @default("pending")
+        createdAt DateTime @default(now())
+        updatedAt DateTime @updatedAt
+    }
 
 
-create app/tasks module:
-    src/tasks/task.entity.ts (Task entity)
-    src/tasks/tasks.service.ts (Task service)
-    src/tasks/tasks.controller.ts (Task controller)
-    src/tasks/tasks.module.ts (Tasks module)
+npx prisma migrate dev --name init
+npx prisma generate
+npx prisma studio
+
+
+***
+
+Step Three:
+
+
+Create Backend:
+    src/app/api/tasks
+        route.ts
+        [id]/route.ts
+
+Create Frontend:
+    src/components/TaskForm.tsx
+    src/app/page.tsx
+
+
+npm run dev
 
 
 
 
 ***
 
+Step Four:
 
-npx tailwindcss init -p
-
-if it shows error:
-    npm cache clean --force
-    npm install tailwindcss postcss autoprefixer
-    npx tailwindcss init -p
-
-
-
-
+    Push to github
+    npm i -g vercel
+    vercel
+    Configure the DATABASE_URL environment variable in Vercel’s dashboard.
